@@ -17,9 +17,9 @@ const getRecipeAPI = async () => {
       healthScore: recipe.healthScore,
       analyzedInstructions: recipe.analyzedInstructions,
       image: recipe.image,
-   /*    diets: e.diets.map((e) => {
+      diets: recipe.diets.map((e) => {
         return { name: e };
-      }),
+      }),/* 
       steps: e.analyzedInstructions[0]?.steps.map((e) => {
         return e.step;
       }),
