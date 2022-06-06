@@ -1,0 +1,26 @@
+.landing {
+  display: flex;
+  flex-direction: column;
+  width: 100hw;
+  height: 100vh;
+  background-image: url("../assets/backgroungLanding.jpg");
+  background-size: cover;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  padding-right: 50px;
+
+}
+
+.buttonEnter {
+  box-shadow: 8px 7px 15px 2px rgba(145, 143, 143, 0.81);
+  margin-top: 150px;
+  height: 50px;
+  width: 190px;
+  border-radius: 10px;
+  background-color: rgb(48, 55, 26);
+  color: white;
+  border: none;
+  font-size: 30px;
+  cursor: pointer;
+}

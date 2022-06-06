@@ -1,0 +1,47 @@
+.navbar {
+ /*  box-shadow: 8px 8px 53px -26px rgba(66, 68, 90, 1) inset; */
+
+  height: 80px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px 15px 0px 15px;
+}
+.navbar a {
+  text-decoration: none;
+}
+.inputHome {
+  width: 50%;
+
+  display: flex;
+  justify-content: flex-end;
+}
+.inputHome div {
+  display: flex;
+  flex-direction: row;
+  padding-right: 50px;
+}
+
+.navb {
+  width: 70%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav {
+
+
+  border-radius: 7px;
+  width: 25%;
+  height: 70%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+.nav a {
+  text-decoration: none;
+  cursor: pointer;
+}
