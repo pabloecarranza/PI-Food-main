@@ -3,7 +3,6 @@ const { Recipe, Diet } = require("../db");
 
 //GET http://localhost:3001/recipe
 const getAllRecipe = async (req, res) => {
-  console.log("aaaaaaaaaa");
   const title = req.body.title;
   let fullRecipes = await getAllRecipes();
   if (title) {
@@ -18,26 +17,23 @@ const getAllRecipe = async (req, res) => {
   }
 };
 
-
-//http://localhost:3001/recipe/name/?name=Nigerian
+//http://localhost:3001/recipe/name/?name=Homemade
 const getRecipeByName = async (req, res) => {
-  console.log("bbbbbbbbbbbbbbb");
   const { name } = req.query;
-  let fullRecipes = await getAllRecipes();
-
+  const recipesTotal = await getAllRecipes();
   if (name) {
-    let recipeTitle = await fullRecipes.filter((r) =>
+    let recipeTitle = await recipesTotal.filter((r) =>
       r.title.toLowerCase().includes(name.toLowerCase())
     );
-
-    console.log(recipeTitle);
     recipeTitle.length
       ? res.status(200).json(recipeTitle)
-      : res.status(404).send("this recipe doesn't exist");
+      : res.status(404).send("This recipe doesn't exist -.-");
   } else {
-    res.status(200).json(fullRecipes);
+    res.status(200).json(recipesTotal);
   }
 };
+
+
 
 // GET  http://localhost:3001/recipe/716426
 const getRecipebyID = async (req, res) => {
@@ -57,12 +53,39 @@ const getRecipebyID = async (req, res) => {
 /* 
   body => raw => JSON 
 {
-    "title": "Arroz con Papa",
+    "title": "Ravioles Duros",
     "summary": "revuelta de papa con arroz",
     "aggregateLikes": 4,
     "healthScore": 10,
     "analyzedInstructions": "que se yo",
-    "image": "image.jpg"
+    "image": "https://www.diariamenteali.com/medias/comida-divertida-para-tus-hijos-1900Wx500H?context=bWFzdGVyfGltYWdlc3wxOTA5NTh8aW1hZ2UvanBlZ3xoNjgvaDE5LzkwNzQyODkwNDk2MzAvY29taWRhLWRpdmVydGlkYS1wYXJhLXR1cy1oaWpvc18xOTAwV3g1MDBIfGM2NjhjZTUxZTUyZjdhYjczNTk0NTRhNmI3NjVjZmRkMTYyMTQ4MThlZGFlZTcyMjQ5ZWRlMTRiYWU4NmQyYTY",
+    "diets": [
+            {
+                "name": "gluten free"
+            },
+            {
+                "name": "dairy free"
+            },
+            {
+                "name": "paleolithic"
+            },
+            {
+                "name": "primal"
+            },
+            {
+                "name": "whole 30"
+            }
+        ]
+}
+
+{
+    "title": "Ravioles Duros",
+    "summary": "revuelta de papa con arroz",
+    "aggregateLikes": 4,
+    "healthScore": 10,
+    "analyzedInstructions": "que se yo",
+    "image": "image.jpg",
+    "diets": "gluten free, dairy free, paleolithic, lacto ovo vegetarian"
 }
 
 */
@@ -74,6 +97,7 @@ const postNewRecipe = async (req, res) => {
     healthScore,
     analyzedInstructions,
     image,
+    diets
   } = req.body;
   let newRecipe = await Recipe.create({
     title,
@@ -83,8 +107,13 @@ const postNewRecipe = async (req, res) => {
     analyzedInstructions,
     image,
   });
+  if (!title || !summary) {
+    return res.json("Title and summary are required to create a recipe");
+  }
+  let dietDb = await Diet.findAll({ where: { name: diets } });
+  
+  newRecipe.addDiet(dietDb);
 
-  console.log("Recipe inserted in DB", newRecipe);
 
   res.send("Recipe created");
 };

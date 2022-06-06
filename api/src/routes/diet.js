@@ -1,8 +1,12 @@
 const { Router } = require("express");
 const router = Router();
-const { getDietsTypes } = require('../controllers/diet')
+const { getDietsTypes,  getRecipesbyDiets} = require('../controllers/diet')
+
 
 router.get("/", getDietsTypes);
+
+router.get("/types", getRecipesbyDiets);
+
 
 router.get("/:id", );
 
