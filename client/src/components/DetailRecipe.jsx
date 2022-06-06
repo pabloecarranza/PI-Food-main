@@ -35,7 +35,7 @@ function DetailRecipe() {
   return (
     <div className={Styles.father}>
       <div className={Styles.sun}>
-        <img src={detail.image} alt="" />
+        <img src={detail.image} alt="" id={Styles.img}/>
         <h3>Recipe Name</h3>
         <span>{detail.title}</span>
         <h3>Aggregate Likes</h3>
@@ -61,7 +61,7 @@ function DetailRecipe() {
         <h3>Analized Instructions</h3>
          {detail.analyzedInstructions ? (
            <ul>
-            {detail.analyzedInstructions[0]?.steps.map((p) => (
+            {detail.analyzedInstructions[0]?.steps?.map((p) => (
               <li key={p.number}>{p.step}</li>
               ))}
           </ul>

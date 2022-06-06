@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import Modal from "./Modal";
 import Modal2 from "./Modal2";
 
+
 function validate(input) {
   let errors = {};
   const regexTitle = /^([a-zA-Z ]+)$/i;
@@ -145,7 +146,6 @@ function CreateRecipe() {
               name="title"
               onChange={(e) => handleChange(e)}
             />
-            {errors.title && <p>{errors.title}</p>}
 
             <label>score</label>
             <input
@@ -155,7 +155,7 @@ function CreateRecipe() {
               min="0"
               max="10000"
               onChange={(e) => handleChange(e)}
-            />
+              />
 
             <label>Health Score</label>
             <input
@@ -165,7 +165,7 @@ function CreateRecipe() {
               min="0"
               max="10000"
               onChange={(e) => handleChange(e)}
-            />
+              />
 
             <label>Image:</label>
             <input
@@ -174,7 +174,7 @@ function CreateRecipe() {
               value={input.image}
               name="image"
               onChange={(e) => handleChange(e)}
-            />
+              />
             {errors.image && <p>{errors.image}</p>}
             <span>Type of Diet:</span>
             <select onChange={(e) => handleSelectDiet(e)}>
@@ -184,19 +184,23 @@ function CreateRecipe() {
                 </option>
               ))}
             </select>
+            <div className={Styles.Diets}>
+
             {input.diets.map((d, i) => (
               <ul key={i}>
                 <p>{d}</p>
                 <button>x</button>
               </ul>
             ))}
+            </div>
+            {errors.title && <p>{errors.title}</p>}
           </div>
           <div className={Styles.Three}>
             <label>summary:</label>
             <textarea
               name="summary"
               id=""
-              cols="60"
+              cols="30"
               rows="10"
               placeholder="Complete here..."
               type="text"
@@ -208,13 +212,13 @@ function CreateRecipe() {
             <textarea
               name="analyzedInstructions"
               id=""
-              cols="60"
+              cols="30"
               rows="10"
               placeholder="Complete here..."
               type="text"
               value={input.analyzedInstructions}
               onChange={(e) => handleChange(e)}
-            ></textarea>
+              ></textarea>
           </div>
 
           {errors.diets && <p>{errors.diets}</p>}

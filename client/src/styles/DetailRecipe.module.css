@@ -25,3 +25,7 @@
   overflow: scroll;
   overflow: hidden;
 }
+
+#img{
+  width: 300px;
+}
