@@ -4,10 +4,18 @@ const initialState = {
   detail: [],
   allRecipes: [],
   error: "",
+  indexOfFirstRecipe: 0,
+  indexOfLastRecipe: 3,
 };
 
 export default function rootReducer(state = initialState, action) {
   switch (action.type) {
+    case "PAG_INDEXES": 
+        return {
+          ...state,
+          indexOfFirstRecipe: action.payload.indexOfFirstRecipe,
+          indexOfLastRecipe: action.payload.indexOfLastRecipe,
+        };
     case "GET_RECIPES":
       return {
         ...state,
@@ -24,6 +32,11 @@ export default function rootReducer(state = initialState, action) {
         ...state,
         detail: action.payload,
       };
+      case "GET_NAME_RECIPE":
+        return {
+          ...state,
+          recipe: action.payload,
+        };
     case "ERROR_OCURRED":
       return {
         ...state,
@@ -38,44 +51,36 @@ export default function rootReducer(state = initialState, action) {
         ...state,
         detail: [],
       };
+      case "ERROR_OCURRED":
+        return {
+            ...state,
+            error: action.payload
+        }
+
+        case "CLEAR_ERROR":
+          return {
+              ...state,
+              error: ''
+          }
     case "FILTER_BY_DIET":
       let allRecipes = state.allRecipes;
-      const recipesApi = allRecipes.filter((r) => !r.createDB);
-      const filteredRecipesApi = recipesApi.filter((r) =>
-        r.diets.includes(action.payload)
-      );
-
-      const recipeDb = allRecipes.filter((r) => r.createDB);
-
-      let c = [];
-      recipeDb.forEach((e) => {
+      
+     
+      let Filtered = [];
+      
+      allRecipes.forEach((e) => {
         if (
           e.hasOwnProperty("diets") &&
           e.diets.find((c) => c.name === action.payload)
         ) {
-          c.push(e);
+          Filtered.push(e);
         }
       });
-
-      let vegie = [];
-      recipeDb.forEach((e) => {
-        if (
-          e.hasOwnProperty("diets") &&
-          e.diets.find((c) => c.name === "vegetarian")
-        ) {
-          vegie.push(e);
-        }
-      });
-
-      const filtered = c.concat(filteredRecipesApi);
-      const vegetarianApi = allRecipes.filter((r) => r.vegetarian === true);
-      const vegetarian = vegie.concat(vegetarianApi);
-      const ternario = action.payload === "vegetarian" ? vegetarian : filtered;
 
       return {
         ...state,
-        recipe: action.payload === "default" ? allRecipes : ternario,
-      };
+        recipe : action.payload === "default" ? allRecipes : Filtered
+      }
     case "ORDER_BY_NAME":
       let sortedArr =
         action.payload === "asc"

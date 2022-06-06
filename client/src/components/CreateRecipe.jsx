@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getDiets, postRecipe } from "../redux/actions";
+import { clearError, getDiets, postRecipe } from "../redux/actions";
 import Styles from "../styles/CreateRecipe.module.css";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import Modal from "./Modal";
+import Modal2 from "./Modal2";
 
 function validate(input) {
   let errors = {};
@@ -41,6 +43,17 @@ function CreateRecipe() {
   const [popUp, setPopUp] = useState(false);
   const [popUp2, setPopUp2] = useState(false);
 
+  const clearErrors = () => {
+    // manejo de errores para la ventana modal
+    dispatch(clearError());
+    navigate("/home/");
+  };
+
+  const clearErrors2 = () => {
+    // manejo de errores para la ventana modal
+    setPopUp2(false);
+  };
+
   useEffect(() => {
     dispatch(getDiets());
   }, [dispatch]);
@@ -54,8 +67,6 @@ function CreateRecipe() {
     image: "",
     diets: [],
   });
-
- 
 
   let navigate = useNavigate();
   const handleClickss = () => {
@@ -84,13 +95,14 @@ function CreateRecipe() {
       !input.image ||
       input.diets.length === 0
     ) {
+      setPopUp2(() => true);
+
       e.preventDefault();
-      console.log("aaaa nana");
     }
 
     if (input.title && input.summary && input.image && input.diets.length > 0) {
       e.preventDefault();
-      console.log(input);
+
       dispatch(postRecipe(input));
 
       setInput({
@@ -120,87 +132,92 @@ function CreateRecipe() {
   }
 
   return (
-    <div>
-      <div className={Styles.father}>
-        <form className={Styles.form} onSubmit={(e) => handleSubmit(e)}>
-          <h4>Create your own Recipe here:</h4>
-          <label>Title:</label>
-          <input
-            type="text"
-            placeholder="Plate Name here..."
-            value={input.title}
-            name="title"
-            onChange={(e) => handleChange(e)}
-          />
+    <div className={Styles.First}>
+        <h4>Create your own Recipe here:</h4>
+      <div className={Styles.supply}>
+        <form onSubmit={(e) => handleSubmit(e)}>
+          <div className={Styles.Second}>
+            <label>Title:</label>
+            <input
+              type="text"
+              placeholder="Plate Name here..."
+              value={input.title}
+              name="title"
+              onChange={(e) => handleChange(e)}
+            />
+            {errors.title && <p>{errors.title}</p>}
 
-          <label>summary:</label>
-          <textarea
-            name="summary"
-            id=""
-            cols="30"
-            rows="90"
-            placeholder="Complete here..."
-            type="text"
-            value={input.summary}
-            onChange={(e) => handleChange(e)}
-          ></textarea>
+            <label>score</label>
+            <input
+              type="number"
+              value={input.aggregateLikes}
+              name="aggregateLikes"
+              min="0"
+              max="10000"
+              onChange={(e) => handleChange(e)}
+            />
 
-          <label>Instruccions:</label>
-          <textarea
-            name="analyzedInstructions"
-            id=""
-            cols="30"
-            rows="60"
-            placeholder="Complete here..."
-            type="text"
-            value={input.analyzedInstructions}
-            onChange={(e) => handleChange(e)}
-          ></textarea>
+            <label>Health Score</label>
+            <input
+              type="number"
+              value={input.healthScore}
+              name="healthScore"
+              min="0"
+              max="10000"
+              onChange={(e) => handleChange(e)}
+            />
 
-          <label>score</label>
-          <input
-            type="number"
-            value={input.aggregateLikes}
-            name="aggregateLikes"
-            min="0"
-            max="10000"
-            onChange={(e) => handleChange(e)}
-          />
-
-          <label>Health Score</label>
-          <input
-            type="number"
-            value={input.healthScore}
-            name="healthScore"
-            min="0"
-            max="10000"
-            onChange={(e) => handleChange(e)}
-          />
-
-          <label>Image:</label>
-          <input
-            type="text"
-            placeholder="Example: https://..."
-            value={input.image}
-            name="image"
-            onChange={(e) => handleChange(e)}
-          />
-
-          <span>Type of Diet:</span>
-          <select onChange={(e) => handleSelectDiet(e)}>
-            {diets.map((d) => (
-              <option value={d.name} key={d.id}>
-                {d.name}
-              </option>
+            <label>Image:</label>
+            <input
+              type="text"
+              placeholder="Example: https://..."
+              value={input.image}
+              name="image"
+              onChange={(e) => handleChange(e)}
+            />
+            {errors.image && <p>{errors.image}</p>}
+            <span>Type of Diet:</span>
+            <select onChange={(e) => handleSelectDiet(e)}>
+              {diets.map((d) => (
+                <option value={d.name} key={d.id}>
+                  {d.name}
+                </option>
+              ))}
+            </select>
+            {input.diets.map((d, i) => (
+              <ul key={i}>
+                <p>{d}</p>
+                <button>x</button>
+              </ul>
             ))}
-          </select>
-          {input.diets.map((d, i) => (
-            <ul key={i}>
-              <p>{d}</p>
-              <button>x</button>
-            </ul>
-          ))}
+          </div>
+          <div className={Styles.Three}>
+            <label>summary:</label>
+            <textarea
+              name="summary"
+              id=""
+              cols="60"
+              rows="10"
+              placeholder="Complete here..."
+              type="text"
+              value={input.summary}
+              onChange={(e) => handleChange(e)}
+            ></textarea>
+            {errors.summary && <p>{errors.summary}</p>}
+            <label>Instruccions:</label>
+            <textarea
+              name="analyzedInstructions"
+              id=""
+              cols="60"
+              rows="10"
+              placeholder="Complete here..."
+              type="text"
+              value={input.analyzedInstructions}
+              onChange={(e) => handleChange(e)}
+            ></textarea>
+          </div>
 
+          {errors.diets && <p>{errors.diets}</p>}
           <br />
           <input type="submit" />
           <br />
@@ -208,7 +225,15 @@ function CreateRecipe() {
           <button onClick={handleClickss}>Pagina Principal</button>
         </form>
       </div>
-      <div></div>
+      <div>
+        {popUp2 && (
+          <Modal2
+            show={true}
+            setShow={clearErrors2}
+            message={"Complete every field!"}
+          />
+        )}
+      </div>
     </div>
   );
 }

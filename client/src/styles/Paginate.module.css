@@ -1,0 +1,37 @@
+
+
+.btnPag {
+    display: flex;
+    justify-content: center;
+    margin-top: 0px;
+    margin-bottom: 10px;
+  }
+  
+  /* .btnPag button {
+      cursor: pointer;
+    border: solid 2px transparent;
+    border-color: rgb(0, 0, 0);
+    border-radius: 6%;
+    background-color: rgb(215, 210, 210);
+    transition: background-color 0.25s, color 0.25s;
+    color: rgb(0, 0, 0);
+    
+    font-size: 18px;
+    padding: 13px;
+    margin: 7px;
+  }
+  
+  .btnPag button:hover {
+    background-color:rgb(238, 238, 238);
+    color: rgb(255, 255, 255);
+  }
+  
+  .btnPag button.active {
+    font-weight: bold;
+    font-size: 23px;
+    background-color:rgb(238, 238, 238);
+    color: rgb(0, 0, 0);
+  }
+   */
+  
+  

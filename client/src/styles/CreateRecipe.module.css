@@ -1,33 +1,36 @@
-.father{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 90%;
-    width: 39%;
-    margin-left: 35%;
-    margin-top: 2%;
-    background: rgba( 255, 255, 255, 0.25 );
-box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
-backdrop-filter: blur( 4px );
--webkit-backdrop-filter: blur( 4px );
-border-radius: 10px;
-border: 1px solid rgba( 255, 255, 255, 0.18 );
+.First {
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  height: 90vh;
+  width: 90vw;
+  display: flex;
+  margin-top: 2%;
+  margin-left: 3%;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
-.form{
-    margin: 40px;
-    height: 80vh;
-    width: 50vw;
-    
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-    
+.supply {
+  height: 100%;
+  width: 90%;
+  display: flex;
+  justify-content: center;
+}
+.Second {
+  padding-top: 17px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
 
-.div{
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
+.Three {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: center;
 }

@@ -22,6 +22,10 @@ export function getDiets() {
   };
 }
 
+export const setPagIndexes = (indexOfLastRecipe, indexOfFirstRecipe) => {
+  return { type: "PAG_INDEXES", payload: { indexOfLastRecipe, indexOfFirstRecipe } };
+};
+
 export function clearDetails(){
   return {
     type: "CLEAR_DETAILS",
@@ -81,4 +85,24 @@ export function postRecipe(payload){
       //payload({type: ERROR_OCURRED, payload: error.toString()})
     }
   };
+}
+
+export function getNameRecipe(name){
+  return async function(dispatch){
+    try {
+      const json = await axios.get(`http://localhost:3001/recipe/name/?name=${name}`);
+      return dispatch({
+        type: "GET_NAME_RECIPE",
+        payload: json.data,
+      });
+    } catch (error) {
+      dispatch({type: "ERROR_OCURRED", payload: error.toString()})
+    }
+  }
+}
+
+export function clearError()  {
+  return {
+      type: "CLEAR_ERROR"
+  }
 }
