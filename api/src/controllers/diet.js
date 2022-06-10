@@ -6,7 +6,7 @@ const { getAllRecipes } = require("./utils");
 
 const getDietsTypes = async (req, res) => {
   const allDiets = await axios.get(
-    "https://api.spoonacular.com/recipes/complexSearch?apiKey=2cf1d780b2f44897983c29b8f27d76cc&addRecipeInformation=true&number=5"
+    "https://api.spoonacular.com/recipes/complexSearch?apiKey=3acfcb58bb1d44ba86ca5af2eec7566f&addRecipeInformation=true&number=5"
   );
   const diets = allDiets.data?.results.map((diet) => diet.diets);
   const flatDiets = diets.flat().concat("vegetarian");

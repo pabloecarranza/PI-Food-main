@@ -5,7 +5,7 @@ import StylesNav from "../styles/Navbar.module.css";
 
 import { useDispatch, useSelector } from "react-redux";
 import { Link, NavLink } from "react-router-dom";
-import { clearError, filterByDiet, getDiets, getRecipes, orderByName, setPagIndexes } from "./../redux/actions";
+import { clearError, filterByDiet, getDiets, getRecipes, orderByName, orderByScoreLikes, setPagIndexes } from "./../redux/actions";
 import Paginates from './Paginate';
 import SearchBar from './SearchBar';
 import Modal from './Modal';
@@ -24,20 +24,24 @@ function HomePage() {
     }
   );
 
+console.log(allRecipes);
 
-  const [currentPage, setCurrentPage] = useState(1);        // aca seteo la pagina inicial en 1
-  const [recipesPerPage, /*setRecipesPerPage*/] = useState(3);// le pido paginar 9  cards en cada page
-  const indexOfLastRecipe = currentPage * recipesPerPage;   
-  const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
-  const currentRecipes = allRecipes.slice(indexOfFirstRecipe, indexOfLastRecipe);
+  const [currentPage, setCurrentPage] = useState(1);        
+ 
+  const recipesPerPage = 10;
+  
+  const lastRecipeInActualPage = currentPage * recipesPerPage;   
+  const firstRecipeINActualPage = lastRecipeInActualPage - recipesPerPage;
+  const currentRecipes = allRecipes.slice(firstRecipeINActualPage, lastRecipeInActualPage);
 
-  const pagesDisplayLimit = 5;  // aca  limito la cantidad de botones de paginado que quiero mostrar
+  const amoutButtonsRender = 5;  
   const [maxPageDisplay, setMaxPageDisplay] = useState(5);
   const [minPageDisplay, setMinPageDisplay] = useState(1);
 
   
   let lastpage = [];
-  for (let i = 1; i <= Math.ceil(allRecipes.length / recipesPerPage); i++) {  // la ultima pagina, esto lo uso de indice para mi nextSup
+  for (let i = 1; i <= Math.ceil(allRecipes.length / recipesPerPage); i++) {  
+    // la ultima pagina, esto lo uso de indice para mi nextSup
   lastpage.push(i);    
 }
 
@@ -52,8 +56,8 @@ setPopUp2(false);
 }
 
 useEffect(
-  () => dispatch(setPagIndexes(indexOfLastRecipe, indexOfFirstRecipe)),
-  [indexOfLastRecipe, indexOfFirstRecipe, dispatch]);
+  () => dispatch(setPagIndexes(lastRecipeInActualPage, firstRecipeINActualPage)),
+  [lastRecipeInActualPage, firstRecipeINActualPage, dispatch]);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -74,10 +78,9 @@ useEffect(
     if (currentPage !== lastpage.length) {
       setCurrentPage(currentPage + 1);
       window.scrollTo( 0, 0 );
-      console.log("holiiis")
       if (currentPage + 1 > maxPageDisplay) {
-        setMaxPageDisplay(maxPageDisplay + pagesDisplayLimit);
-        setMinPageDisplay(minPageDisplay + pagesDisplayLimit);
+        setMaxPageDisplay(maxPageDisplay + amoutButtonsRender);
+        setMinPageDisplay(minPageDisplay + amoutButtonsRender);
       }
     }
   };
@@ -88,7 +91,7 @@ useEffect(
       window.scrollTo( 0, 0 );
       setCurrentPage(lastPage);
       setMaxPageDisplay(lastPage);
-      setMinPageDisplay(lastPage - pagesDisplayLimit + 1);
+      setMinPageDisplay(lastPage - amoutButtonsRender + 1);
     }
   };
   
@@ -101,8 +104,8 @@ useEffect(
       window.scrollTo( 0, 0 );
       setCurrentPage(currentPage - 1);
         if (currentPage - 1 < minPageDisplay) {
-        setMaxPageDisplay(maxPageDisplay - pagesDisplayLimit < 5 ? 5 : maxPageDisplay - pagesDisplayLimit);
-        setMinPageDisplay(minPageDisplay - pagesDisplayLimit <= 0 ? 1 : minPageDisplay - pagesDisplayLimit);
+        setMaxPageDisplay(maxPageDisplay - amoutButtonsRender < 5 ? 5 : maxPageDisplay - amoutButtonsRender);
+        setMinPageDisplay(minPageDisplay - amoutButtonsRender <= 0 ? 1 : minPageDisplay - amoutButtonsRender);
       }
     }
   };
@@ -121,6 +124,12 @@ function handleSort(e){
    e.preventDefault();
   dispatch(orderByName(e.target.value))
   setSort(`Ordenado ${e.target.value}`)
+}
+
+function handleByScore(e){
+  e.preventDefault();
+ dispatch(orderByScoreLikes(e.target.value))
+ setSort(`Ordenado ${e.target.value}`)
 }
 
 function handleFilteredByDiets(e){
@@ -147,10 +156,18 @@ function handleFilteredByDiets(e){
           </div>
           <div>
             <select onChange={(e) => handleSort(e)}>
-              <option value="none">Select Order</option>
-              <option value="asc">Order A - Z</option>
-              <option value="des">Order Z - A</option>
+              <option value="default">Order by Recipe Name</option>
+              <option value="A-Z">A - Z</option>
+              <option value="Z-A">Z - A</option>
             </select>
+          
+
+<select id='orderScore' onChange={(s) => handleByScore(s)}>
+        <option value="unordered" disabled hidden>All</option>
+        <option value="All">Order by Score</option>
+        <option value="Asc">Highest Score</option>
+        <option value="Desc">Lowest Score</option>
+        </select>
             <select onChange={(e)=> handleFilteredByDiets(e)}>
               <option value="default">All Diets</option>
               {allDiets.map((diet) => {
@@ -199,6 +216,7 @@ function handleFilteredByDiets(e){
               image={recipe.image}
               title={recipe.title}
               diets={recipe.diets}
+              healthScore={recipe.healthScore}
             />
           ))
         ) : (

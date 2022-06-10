@@ -7,7 +7,6 @@ import { useSelector } from "react-redux";
 import Modal from "./Modal";
 import Modal2 from "./Modal2";
 
-
 function validate(input) {
   let errors = {};
   const regexTitle = /^([a-zA-Z ]+)$/i;
@@ -29,9 +28,6 @@ function validate(input) {
     errors.image = "This isn't a valid image address";
   }
 
-  /*  else {
-    errors.image = "";
-  } */
   return errors;
 }
 
@@ -81,12 +77,11 @@ function CreateRecipe() {
         diets: [...input.diets, e.target.value],
       })
     );
-    if (!diets.includes(e.target.value)) {
-      setInput((input) => ({
-        ...input,
-        diets: [...input.diets, e.target.value],
-      }));
-    }
+
+    setInput((input) => ({
+      ...input,
+      diets: [...input.diets, e.target.value],
+    }));
   }
 
   function handleSubmit(e) {
@@ -105,7 +100,7 @@ function CreateRecipe() {
       e.preventDefault();
 
       dispatch(postRecipe(input));
-
+      setPopUp(() => true);
       setInput({
         title: "",
         summary: "",
@@ -132,10 +127,32 @@ function CreateRecipe() {
     );
   }
 
+  function handleDelete(e, d) {
+    e.preventDefault();
+    setInput({
+      ...input,
+      diets: input.diets.filter((diet) => diet !== d),
+    });
+  }
+
   return (
     <div className={Styles.First}>
-        <h4>Create your own Recipe here:</h4>
+      <h4>Create your own Recipe here:</h4>
       <div className={Styles.supply}>
+        {popUp2 && (
+          <Modal2
+            show={true}
+            setShow={clearErrors2}
+            message={"Complete every field!"}
+          />
+        )}
+        {popUp && (
+          <Modal
+            show={true}
+            setShow={clearErrors}
+            message={"Recipe created!"}
+          />
+        )}
         <form onSubmit={(e) => handleSubmit(e)}>
           <div className={Styles.Second}>
             <label>Title:</label>
@@ -155,7 +172,7 @@ function CreateRecipe() {
               min="0"
               max="10000"
               onChange={(e) => handleChange(e)}
-              />
+            />
 
             <label>Health Score</label>
             <input
@@ -165,7 +182,7 @@ function CreateRecipe() {
               min="0"
               max="10000"
               onChange={(e) => handleChange(e)}
-              />
+            />
 
             <label>Image:</label>
             <input
@@ -174,7 +191,7 @@ function CreateRecipe() {
               value={input.image}
               name="image"
               onChange={(e) => handleChange(e)}
-              />
+            />
             {errors.image && <p>{errors.image}</p>}
             <span>Type of Diet:</span>
             <select onChange={(e) => handleSelectDiet(e)}>
@@ -185,17 +202,18 @@ function CreateRecipe() {
               ))}
             </select>
             <div className={Styles.Diets}>
-
-            {input.diets.map((d, i) => (
-              <ul key={i}>
-                <p>{d}</p>
-                <button>x</button>
-              </ul>
-            ))}
+              {input.diets.map((d, i) => (
+                <ul key={i} className={Styles.ULs}>
+                  <p></p>
+                  <button onClick={(e) => handleDelete(e, d)}>{d} x</button>
+                </ul>
+              ))}
             </div>
             {errors.title && <p>{errors.title}</p>}
           </div>
           <div className={Styles.Three}>
+            <div className={Styles.desp}>
+
             <label>summary:</label>
             <textarea
               name="summary"
@@ -206,8 +224,11 @@ function CreateRecipe() {
               type="text"
               value={input.summary}
               onChange={(e) => handleChange(e)}
-            ></textarea>
+              ></textarea>
+              </div>
             {errors.summary && <p>{errors.summary}</p>}
+            <div className={Styles.desp}>
+
             <label>Instruccions:</label>
             <textarea
               name="analyzedInstructions"
@@ -219,6 +240,7 @@ function CreateRecipe() {
               value={input.analyzedInstructions}
               onChange={(e) => handleChange(e)}
               ></textarea>
+              </div>
           </div>
 
           {errors.diets && <p>{errors.diets}</p>}

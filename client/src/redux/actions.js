@@ -82,22 +82,18 @@ export function postRecipe(payload){
         json,
       };
     } catch (error) {
-      //payload({type: ERROR_OCURRED, payload: error.toString()})
+
     }
   };
 }
 
 export function getNameRecipe(name){
   return async function(dispatch){
-    try {
       const json = await axios.get(`http://localhost:3001/recipe/name/?name=${name}`);
       return dispatch({
         type: "GET_NAME_RECIPE",
         payload: json.data,
       });
-    } catch (error) {
-      dispatch({type: "ERROR_OCURRED", payload: error.toString()})
-    }
   }
 }
 
@@ -105,4 +101,11 @@ export function clearError()  {
   return {
       type: "CLEAR_ERROR"
   }
+}
+
+export function orderByScoreLikes(payload) {
+  return {
+    type: "ORDER_BY_SCORE_LIKES",
+    payload,
+  };
 }

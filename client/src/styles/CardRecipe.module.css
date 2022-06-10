@@ -1,8 +1,8 @@
 .card {
-  height: 250px;
+  height: 270px;
   width: 235px;
   background-color: yellow;
-  font-size: 4px;
+
   margin: 10px;
   background: rgba(255, 255, 255, 0.25);
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
@@ -21,3 +21,11 @@
 .card img {
   width: 190px;
 }
+
+.card>:nth-child(2){
+  font-size: 13px;
+  font-family:  sans-serif;
+  font-weight: bolder;
+  padding-bottom: 7px;
+}
+

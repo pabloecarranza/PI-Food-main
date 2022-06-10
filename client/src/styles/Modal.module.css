@@ -11,4 +11,7 @@
   z-index: 1;
   align-items: center;
   padding-left: 2%;
+  display: flex;
+  justify-content: space-evenly;
+  width: 30vw;
 }
